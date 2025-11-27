@@ -148,6 +148,8 @@ h1.glitch {
     font-size: 0.9rem;
     scrollbar-width: thin;
     scrollbar-color: var(--accent-color) transparent;
+    display: block;
+    /* Override flex from .terminal-output to ensure simple flow */
 }
 
 #chat-container .input-area {
@@ -178,6 +180,149 @@ h1.glitch {
 
 #send-btn:hover {
     background: #fff;
+}
+
+/* Cake Overlay */
+#cake-overlay {
+    position: fixed;
+    /* Fixed to viewport */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    /* High z-index */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cake-container {
+    position: relative;
+    transform: scale(1.5);
+}
+
+.cake {
+    position: relative;
+    width: 250px;
+    height: 200px;
+    margin-top: 50px;
+}
+
+.layer {
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    border-radius: 10px;
+    left: 0;
+}
+
+.layer-bottom {
+    bottom: 0;
+    background: #5c3a21;
+}
+
+/* Chocolate */
+.layer-middle {
+    bottom: 60px;
+    background: #f4d03f;
+}
+
+/* Sponge */
+.layer-top {
+    bottom: 120px;
+    background: #e74c3c;
+}
+
+/* Strawberry */
+
+.icing {
+    position: absolute;
+    top: 15px;
+    /* Adjust based on top layer */
+    left: -5px;
+    width: 260px;
+    height: 20px;
+    background: #ecf0f1;
+    border-radius: 20px;
+    z-index: 2;
+}
+
+.candle {
+    position: absolute;
+    bottom: 180px;
+    width: 15px;
+    height: 50px;
+    background: repeating-linear-gradient(45deg, #fff, #fff 5px, #3498db 5px, #3498db 10px);
+    z-index: 3;
+    cursor: pointer;
+}
+
+#c1 {
+    left: 40px;
+}
+
+#c2 {
+    left: 80px;
+}
+
+#c3 {
+    left: 120px;
+}
+
+#c4 {
+    left: 160px;
+}
+
+#c5 {
+    left: 200px;
+}
+
+.flame {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 20px;
+    background: #f39c12;
+    border-radius: 50% 50% 20% 20%;
+    box-shadow: 0 0 10px #f1c40f;
+    animation: flicker 0.5s infinite alternate;
+}
+
+.flame.out {
+    display: none;
+}
+
+@keyframes flicker {
+    0% {
+        transform: translateX(-50%) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-50%) scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+#confetti-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 25;
+}
+
+#cake-msg {
+    text-align: center;
+    margin-top: 20px;
+    font-family: var(--font-pixel);
+    color: var(--accent-color);
 }
 
 /* Game Screen */

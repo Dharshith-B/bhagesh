@@ -36,12 +36,110 @@ document.addEventListener('DOMContentLoaded', () => {
         chatContainer.classList.add('hidden');
     });
 
+    // --- Cake Game Logic ---
+    const cakeOverlay = document.getElementById('cake-overlay');
+    const candles = document.querySelectorAll('.candle');
+    const cakeMsg = document.getElementById('cake-msg');
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const confettiCtx = confettiCanvas.getContext('2d');
+    let candlesOut = 0;
+
+    function showCake() {
+        cakeOverlay.classList.remove('hidden');
+        cakeOverlay.classList.add('active');
+        candlesOut = 0;
+        candles.forEach(c => {
+            c.querySelector('.flame').classList.remove('out');
+            c.style.pointerEvents = 'all';
+        });
+        cakeMsg.textContent = "Blow out the candles! (Click them)";
+    }
+
+    candles.forEach(candle => {
+        candle.addEventListener('click', () => {
+            const flame = candle.querySelector('.flame');
+            if (!flame.classList.contains('out')) {
+                flame.classList.add('out');
+                candlesOut++;
+                candle.style.pointerEvents = 'none'; // Prevent double clicks
+
+                if (candlesOut === candles.length) {
+                    triggerWin();
+                }
+            }
+        });
+    });
+
+    function triggerWin() {
+        cakeMsg.textContent = "YAY! HAPPY BIRTHDAY BHAGESH!";
+        startConfetti();
+        setTimeout(() => {
+            cakeOverlay.classList.remove('active');
+            cakeOverlay.classList.add('hidden');
+            addMessage("You wished for something great!", 'system');
+        }, 5000);
+    }
+
+    // --- Confetti System ---
+    let confettiParticles = [];
+    function startConfetti() {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+        confettiParticles = [];
+
+        for (let i = 0; i < 100; i++) {
+            confettiParticles.push({
+                x: Math.random() * confettiCanvas.width,
+                y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                size: Math.random() * 10 + 5,
+                speed: Math.random() * 5 + 2,
+                angle: Math.random() * 360
+            });
+        }
+        animateConfetti();
+    }
+
+    function animateConfetti() {
+        if (cakeOverlay.classList.contains('hidden')) return;
+
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+        confettiParticles.forEach(p => {
+            p.y += p.speed;
+            p.angle += 2;
+
+            confettiCtx.save();
+            confettiCtx.translate(p.x, p.y);
+            confettiCtx.rotate(p.angle * Math.PI / 180);
+            confettiCtx.fillStyle = p.color;
+            confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            confettiCtx.restore();
+
+            if (p.y > confettiCanvas.height) {
+                p.y = -p.size;
+                p.x = Math.random() * confettiCanvas.width;
+            }
+        });
+
+        requestAnimationFrame(animateConfetti);
+    }
+
     // Chat Logic
     function sendMessage() {
         const text = chatInput.value.trim();
+        console.log("Sending message:", text); // Debug
         if (text) {
             addMessage(text, 'user');
             chatInput.value = '';
+
+            if (text.toLowerCase().includes('cake') || text.toLowerCase().includes('birthday')) {
+                setTimeout(() => {
+                    addMessage("Wait... did you say cake?", 'system');
+                    setTimeout(showCake, 1000);
+                }, 500);
+                return;
+            }
 
             // Simple Echo/Bot Response
             setTimeout(() => {
