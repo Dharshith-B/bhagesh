@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhagesh's Birthday Quest</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="app">
+        <!-- Landing Screen -->
+        <div id="landing-screen" class="screen active">
+            <div class="content">
+                <h1 class="glitch" data-text="LEVEL 24">LEVEL 24</h1>
+                <p class="subtitle">Bhagesh's Birthday Quest</p>
+                <button id="start-btn" class="btn-primary">PRESS START</button>
+            </div>
+        </div>
+
+        <!-- Visualizer Screen -->
+        <div id="visualizer-screen" class="screen hidden">
+            <canvas id="visualizer-canvas"></canvas>
+
+            <div id="chat-container" class="hidden">
+                <div id="chat-output" class="terminal-output">
+                    <div class="message system">Music paused. You can now chat.</div>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
+                    <button id="send-btn">SEND</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bg-music" src="Bhagesh.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

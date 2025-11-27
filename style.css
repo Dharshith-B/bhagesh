@@ -1,0 +1,341 @@
+:root {
+    --bg-color: #0a0a0a;
+    --text-color: #e0e0e0;
+    --accent-color: #00ff9d;
+    --accent-glow: rgba(0, 255, 157, 0.5);
+    --secondary-color: #ff0055;
+    --font-main: 'Outfit', sans-serif;
+    --font-mono: 'Courier New', monospace;
+    --font-pixel: 'Press Start 2P', cursive;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    max-width: 600px;
+    /* Mobile-first constraint on desktop */
+    margin: 0 auto;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease-in-out;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.active {
+    opacity: 1;
+    pointer-events: all;
+    z-index: 10;
+}
+
+/* Landing Screen */
+#landing-screen .content {
+    text-align: center;
+    animation: fadeIn 2s ease-out;
+}
+
+h1.glitch {
+    font-family: var(--font-pixel);
+    font-size: 3rem;
+    color: var(--accent-color);
+    text-shadow: 0 0 10px var(--accent-glow);
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    opacity: 0.8;
+    letter-spacing: 2px;
+}
+
+.btn-primary {
+    background: transparent;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 1rem 2rem;
+    font-family: var(--font-pixel);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    animation: pulse 2s infinite;
+}
+
+.btn-primary:hover {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* Visualizer Screen */
+#visualizer-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#visualizer-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#chat-container {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 15px;
+    z-index: 10;
+    backdrop-filter: blur(5px);
+    transition: opacity 0.5s ease;
+}
+
+#chat-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#chat-container .terminal-output {
+    height: 150px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) transparent;
+}
+
+#chat-container .input-area {
+    display: flex;
+    gap: 10px;
+}
+
+#chat-input {
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #444;
+    color: var(--text-color);
+    padding: 8px;
+    border-radius: 4px;
+    font-family: var(--font-main);
+}
+
+#send-btn {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#send-btn:hover {
+    background: #fff;
+}
+
+/* Game Screen */
+#game-screen {
+    justify-content: flex-end;
+    /* Push content to bottom like a terminal */
+    padding: 20px;
+}
+
+.terminal-output {
+    flex-grow: 1;
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* Start text from bottom */
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    line-height: 1.5;
+    padding-bottom: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) transparent;
+}
+
+.message {
+    margin-bottom: 10px;
+    opacity: 0;
+    animation: slideUp 0.3s forwards;
+}
+
+.message.system {
+    color: #888;
+    font-style: italic;
+}
+
+.message.user {
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.message.game {
+    color: var(--text-color);
+}
+
+.input-area {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #333;
+    padding-top: 10px;
+}
+
+.prompt {
+    color: var(--accent-color);
+    margin-right: 10px;
+    font-family: var(--font-pixel);
+}
+
+#game-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    outline: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Scanline Effect */
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: repeating-linear-gradient(0deg,
+            rgba(0, 0, 0, 0.15),
+            rgba(0, 0, 0, 0.15) 1px,
+            transparent 1px,
+            transparent 2px);
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 600px) {
+    h1.glitch {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    #game-screen {
+        padding: 10px;
+    }
+
+    .terminal-output {
+        font-size: 0.9rem;
+    }
+
+    #game-input {
+        font-size: 1rem;
+    }
+}
+
+/* Scrollbar Polish */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}
